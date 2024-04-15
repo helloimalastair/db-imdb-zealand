@@ -1,6 +1,6 @@
 use database::{insert::*, utils::format};
 use spinners::{Spinner, Spinners::SimpleDotsScrolling};
-use std::{io::Write, thread::spawn};
+use std::{io::Write, thread::spawn, time::Instant};
 
 fn main() {
 	let mut spinner = Spinner::new(
@@ -8,7 +8,7 @@ fn main() {
 		"Inserting data into the database".to_owned(),
 	);
 	std::io::stdout().flush().unwrap();
-	let start = std::time::Instant::now();
+	let start = Instant::now();
 	let name_handle = spawn(insert_name);
 	let crew_handle = spawn(insert_crew);
 	let title_handle = spawn(insert_title);
@@ -20,5 +20,5 @@ fn main() {
 	rows += title_handle.join().unwrap();
 	rows += principals_handle.join().unwrap();
 	rows += akas_handle.join().unwrap();
-	spinner.stop_with_message(format(rows, start));
+	spinner.stop_with_message(format("Inserted", rows, start));
 }

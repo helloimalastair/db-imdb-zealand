@@ -21,7 +21,7 @@ pub struct Genres {
 	pub genre: String,
 }
 
-#[derive(Insertable, Queryable, Selectable, Debug)]
+#[derive(Insertable, Queryable, Selectable)]
 #[diesel(table_name = names)]
 #[diesel(check_for_backend(Pg))]
 #[diesel(treat_none_as_default_value = false)]
@@ -32,7 +32,7 @@ pub struct Names {
 	pub deathyear: Option<i32>,
 }
 
-#[derive(AsChangeset, Deserialize, Insertable, Queryable, Selectable, Debug)]
+#[derive(AsChangeset, Deserialize, Insertable, Queryable, Selectable)]
 #[diesel(table_name = names)]
 #[diesel(check_for_backend(Pg))]
 #[diesel(treat_none_as_default_value = false)]
@@ -42,7 +42,7 @@ pub struct NamesNoId {
 	pub deathyear: Option<i32>,
 }
 
-#[derive(Insertable, Queryable, Selectable, Serialize, Debug)]
+#[derive(Insertable, Queryable, Selectable, Serialize)]
 #[diesel(table_name = titles)]
 #[diesel(check_for_backend(Pg))]
 #[diesel(treat_none_as_default_value = false)]
@@ -57,7 +57,7 @@ pub struct Titles {
 	pub runtimeminutes: Option<i32>,
 }
 
-#[derive(AsChangeset, Deserialize, Insertable, Queryable, Selectable, Serialize, Debug)]
+#[derive(AsChangeset, Deserialize, Insertable, Queryable, Selectable, Serialize)]
 #[diesel(table_name = titles)]
 #[diesel(check_for_backend(Pg))]
 #[diesel(treat_none_as_default_value = false)]
@@ -97,7 +97,7 @@ pub struct Akas {
 	pub is_original_title: Option<bool>,
 }
 
-#[derive(Insertable, Queryable, Selectable, Debug)]
+#[derive(Insertable, Queryable, Selectable)]
 #[diesel(table_name = aka_types)]
 #[diesel(check_for_backend(Pg))]
 #[diesel(treat_none_as_default_value = false)]

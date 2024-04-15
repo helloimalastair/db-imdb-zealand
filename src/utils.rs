@@ -18,7 +18,7 @@ fn fmt_num(val: &u128) -> String {
 }
 
 // Add commas every three digits
-pub fn format(rows: u128, start: Instant) -> String {
+pub fn format(msg: &str, rows: u128, start: Instant) -> String {
 	let elapsed = start.elapsed();
 	let rate = rows / elapsed.as_secs() as u128;
 	let mut nanos = elapsed.as_nanos();
@@ -31,7 +31,8 @@ pub fn format(rows: u128, start: Instant) -> String {
 	let micros = nanos / 1_000;
 	nanos %= 1_000;
 	format!(
-		"Inserted {} rows in {} min, {} sec, {} ms, {} μs, {} ns. Average speed: {} rows/s",
+		"{} {} rows in {} min, {} sec, {} ms, {} μs, {} ns. Average speed: {} rows/s",
+		msg,
 		fmt_num(&rows),
 		minutes,
 		seconds,
