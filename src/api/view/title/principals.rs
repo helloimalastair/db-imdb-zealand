@@ -10,16 +10,13 @@ use diesel::{
 	query_dsl::methods::{FilterDsl, SelectDsl},
 	ExpressionMethods, JoinOnDsl, QueryDsl, Queryable, RunQueryDsl,
 };
-use serde::Serialize;
 
-#[derive(Queryable, Serialize)]
+#[derive(Queryable)]
 pub struct PrincipalRow {
 	pub tconst: i32,
 	pub primaryname: String,
 	pub category: String,
-	#[serde(skip_serializing_if = "Option::is_none")]
 	pub job: Option<String>,
-	#[serde(skip_serializing_if = "Option::is_none")]
 	pub characters: Option<String>,
 }
 

@@ -6,18 +6,37 @@ use crate::{
 	models::Names,
 	schema::names::dsl::{names, nconst},
 };
-use crew::CrewRow;
 use diesel::{
 	pg::PgConnection,
 	query_dsl::methods::{FilterDsl, SelectDsl},
 	ExpressionMethods, RunQueryDsl, SelectableHelper,
 };
-use principals::PrincipalRow;
 use serde::Serialize;
 use warp::{
 	http::StatusCode,
 	reply::{json, with_status, Json, WithStatus},
 };
+
+
+#[derive(Serialize)]
+pub struct CrewWithSqid {
+	pub tconst: String,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub primarytitle: Option<String>,
+	pub isdirector: bool,
+}
+
+#[derive(Serialize)]
+pub struct PrincipalWithSqid {
+	pub tconst: String,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub primaryname: Option<String>,
+	pub category: String,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub job: Option<String>,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	pub characters: Option<String>,
+}
 
 #[derive(Serialize)]
 pub struct ResultObject {
@@ -28,8 +47,8 @@ pub struct ResultObject {
 	pub birthyear: Option<i32>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub deathyear: Option<i32>,
-	pub crew: Vec<CrewRow>,
-	pub principals: Vec<PrincipalRow>,
+	pub crew: Vec<CrewWithSqid>,
+	pub principals: Vec<PrincipalWithSqid>,
 }
 
 pub fn view_person(connection: &mut PgConnection, id: &str) -> WithStatus<Json> {
@@ -73,8 +92,14 @@ pub fn view_person(connection: &mut PgConnection, id: &str) -> WithStatus<Json> 
 			);
 		}
 	};
-	let crew = match crew::get_crew(&id, connection) {
-		Ok(a) => a,
+	let crew: Vec<CrewWithSqid> = match crew::get_crew(&id, connection) {
+		Ok(a) => a.iter().map(|a| {
+			CrewWithSqid {
+				tconst: sqid.encode(&[a.tconst as u64]).unwrap(),
+				primarytitle: a.primarytitle.clone(),
+				isdirector: a.isdirector,
+			}
+		}).collect(),
 		Err(_) => {
 			return with_status(
 				json(&Failure {
@@ -85,8 +110,16 @@ pub fn view_person(connection: &mut PgConnection, id: &str) -> WithStatus<Json> 
 			);
 		}
 	};
-	let principals = match principals::get_principals(&id, connection) {
-		Ok(a) => a,
+	let principals: Vec<PrincipalWithSqid> = match principals::get_principals(&id, connection) {
+		Ok(a) => a.iter().map(|a| {
+			PrincipalWithSqid {
+				tconst: sqid.encode(&[a.tconst as u64]).unwrap(),
+				primaryname: a.primarytitle.clone(),
+				category: a.category.clone(),
+				job: a.job.clone(),
+				characters: a.characters.clone(),
+			}
+		}).collect(),
 		Err(_) => {
 			return with_status(
 				json(&Failure {

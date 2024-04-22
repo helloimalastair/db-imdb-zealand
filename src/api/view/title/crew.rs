@@ -7,11 +7,9 @@ use diesel::{
 	query_dsl::methods::{FilterDsl, SelectDsl},
 	ExpressionMethods, JoinOnDsl, QueryDsl, Queryable, RunQueryDsl,
 };
-use serde::Serialize;
-
-#[derive(Queryable, Serialize)]
+#[derive(Queryable)]
 pub struct CrewRow {
-	pub nconst: i32,
+	pub tconst: i32,
 	pub primaryname: String,
 	pub isdirector: bool,
 }
