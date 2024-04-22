@@ -12,11 +12,3 @@ DELETE FROM "akas" AS a WHERE NOT EXISTS (SELECT 1 FROM "titles" WHERE tconst = 
 DELETE FROM "crew" AS a WHERE NOT EXISTS (SELECT 1 FROM "titles" WHERE tconst = a.tconst) OR NOT EXISTS (SELECT 1 FROM "names" WHERE nconst = a.nconst);
 DELETE FROM "genres" AS a WHERE NOT EXISTS (SELECT 1 FROM "titles" WHERE tconst = a.tconst);
 DELETE FROM "principals" AS a WHERE NOT EXISTS (SELECT 1 FROM "titles" WHERE tconst = a.tconst) OR NOT EXISTS (SELECT 1 FROM "names" WHERE nconst = a.nconst);
-VACUUM FULL aka_attributes;
-VACUUM FULL aka_types;
-VACUUM FULL akas;
-VACUUM FULL crew;
-VACUUM FULL genres;
-VACUUM FULL names;
-VACUUM FULL principals;
-VACUUM FULL titles;
